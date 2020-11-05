@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ResultDao">
+    <resultMap type="com.example.demo.entity.Result" id="ResultMap">
+        <result property="resultId" column="result_id" jdbcType="INTEGER"/>
+        <result property="resultQuestionId" column="result_question_id" jdbcType="INTEGER"/>
+        <result property="resultUserId" column="result_user_id" jdbcType="INTEGER"/>
+        <result property="resultContent" column="result_content" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--查询单个-->
+    <select id="queryById" resultMap="ResultMap">
+        select
+          result_id, result_question_id, result_user_id, result_content
+        from questionnaire.result
+        where result_id = #{resultId}
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ResultMap">
+        select
+          result_id, result_question_id, result_user_id, result_content
+        from questionnaire.result
+        limit #{offset}, #{limit}
+    </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ResultMap">
+        select
+        result_id, result_question_id, result_user_id, result_content
+        from questionnaire.result
+        <where>
+            <if test="resultId != null">
+                and result_id = #{resultId}
+            </if>
+            <if test="resultQuestionId != null">
+                and result_question_id = #{resultQuestionId}
+            </if>
+            <if test="resultUserId != null">
+                and result_user_id = #{resultUserId}
+            </if>
+            <if test="resultContent != null and resultContent != ''">
+                and result_content = #{resultContent}
+            </if>
+        </where>
+    </select>
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="resultId" useGeneratedKeys="true">
+        insert into questionnaire.result(result_question_id, result_user_id, result_content)
+        values (#{resultQuestionId}, #{resultUserId}, #{resultContent})
+    </insert>
+    <insert id="insertBatch" keyProperty="resultId" useGeneratedKeys="true">
+        insert into questionnaire.result(result_question_id, result_user_id, result_content)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.resultQuestionId}, #{entity.resultUserId}, #{entity.resultContent})
+        </foreach>
+    </insert>
+    <insert id="insertOrUpdateBatch" keyProperty="resultId" useGeneratedKeys="true">
+        insert into questionnaire.result(result_question_id, result_user_id, result_content)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.resultQuestionId}, #{entity.resultUserId}, #{entity.resultContent})
+        </foreach>
+        on duplicate key update
+        result_question_id = values(result_question_id) , result_user_id = values(result_user_id) , result_content =
+        values(result_content)
+    </insert>
+    <!--通过主键修改数据-->
+    <update id="update">
+        update questionnaire.result
+        <set>
+            <if test="resultQuestionId != null">
+                result_question_id = #{resultQuestionId},
+            </if>
+            <if test="resultUserId != null">
+                result_user_id = #{resultUserId},
+            </if>
+            <if test="resultContent != null and resultContent != ''">
+                result_content = #{resultContent},
+            </if>
+        </set>
+        where result_id = #{resultId}
+    </update>
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from questionnaire.result where result_id = #{resultId}
+    </delete>
+</mapper>

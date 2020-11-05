@@ -1,0 +1,8 @@
+{
+  "name": "Mybatisdemo",
+  "version": "1.0.0",
+  "dependencies": {
+    "element-ui": "^2.14.0",
+    "vue": "^2.6.12"
+  }
+}

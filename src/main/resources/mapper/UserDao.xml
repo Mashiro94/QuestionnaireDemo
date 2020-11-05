@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.UserDao">
+    <resultMap type="com.example.demo.entity.User" id="UserMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userCompany" column="user_company" jdbcType="VARCHAR"/>
+        <result property="userOpenid" column="user_openid" jdbcType="VARCHAR"/>
+        <result property="userSessionkey" column="user_sessionkey" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select
+          user_id, user_name, user_company, user_openid, user_sessionkey
+        from questionnaire.user
+        where user_id = #{userId}
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap">
+        select
+          user_id, user_name, user_company, user_openid, user_sessionkey
+        from questionnaire.user
+        limit #{offset}, #{limit}
+    </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UserMap">
+        select
+        user_id, user_name, user_company, user_openid, user_sessionkey
+        from questionnaire.user
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="userCompany != null and userCompany != ''">
+                and user_company = #{userCompany}
+            </if>
+            <if test="userOpenid != null and userOpenid != ''">
+                and user_openid = #{userOpenid}
+            </if>
+            <if test="userSessionkey != null and userSessionkey != ''">
+                and user_sessionkey = #{userSessionkey}
+            </if>
+        </where>
+    </select>
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into questionnaire.user(user_name, user_company, user_openid, user_sessionkey)
+        values (#{userName}, #{userCompany}, #{userOpenid}, #{userSessionkey})
+    </insert>
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into questionnaire.user(user_name, user_company, user_openid, user_sessionkey)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.userCompany}, #{entity.userOpenid}, #{entity.userSessionkey})
+        </foreach>
+    </insert>
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into questionnaire.user(user_name, user_company, user_openid, user_sessionkey)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.userCompany}, #{entity.userOpenid}, #{entity.userSessionkey})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name) , user_company = values(user_company) , user_openid = values(user_openid) ,
+        user_sessionkey = values(user_sessionkey)
+    </insert>
+    <!--通过主键修改数据-->
+    <update id="update">
+        update questionnaire.user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userCompany != null and userCompany != ''">
+                user_company = #{userCompany},
+            </if>
+            <if test="userOpenid != null and userOpenid != ''">
+                user_openid = #{userOpenid},
+            </if>
+            <if test="userSessionkey != null and userSessionkey != ''">
+                user_sessionkey = #{userSessionkey},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from questionnaire.user where user_id = #{userId}
+    </delete>
+</mapper>
