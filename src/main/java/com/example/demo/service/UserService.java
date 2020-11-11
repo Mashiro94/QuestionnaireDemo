@@ -30,6 +30,14 @@ public interface UserService {
     List<User> queryAllByLimit(int offset, int limit);
 
     /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param user 实例对象
+     * @return 对象列表
+     */
+    List<User> queryAll(User user);
+
+    /**
      * 新增数据
      *
      * @param user 实例对象

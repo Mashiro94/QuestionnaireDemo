@@ -52,5 +52,4 @@ public interface QuestionnaireService {
      * @return 是否成功
      */
     int deleteById(Integer questionnaireId);
-
 }

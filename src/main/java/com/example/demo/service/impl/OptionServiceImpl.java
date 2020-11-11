@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.OptionDao;
 import com.example.demo.entity.Option;
-import com.example.demo.entity.Question;
 import com.example.demo.service.OptionService;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +37,7 @@ public class OptionServiceImpl implements OptionService {
      * @return 对象列表
      */
     @Override
-    public List<Question> queryAllByQuestionId(Integer questionId) {
+    public List<Option> queryAllByQuestionId(Integer questionId) {
         return this.optionDao.queryAllByQuestionId(questionId);
     }
 

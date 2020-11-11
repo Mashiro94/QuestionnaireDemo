@@ -2,9 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import net.sf.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 
@@ -34,4 +36,32 @@ public class UserController {
         return this.userService.queryById(id);
     }
 
+    @GetMapping("insertOne")
+    public User insertOne(@RequestParam(value="code") String code) {
+
+        String appId = "wx5746bcc018bdbeac";
+
+        String secret = "eb1ab4ffd20ff08eecbda49c995bd732";
+
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appId +
+                "&secret=" + secret +
+                "&js_code=" + code +
+                "&grant_type=authorization_code";
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String userString = responseEntity.getBody();
+
+        JSONObject jsonObject = JSONObject.fromObject(userString);
+        User user = new User(jsonObject.getString("session_key"), jsonObject.getString("openid"));
+
+        if(this.userService.queryAll(user).isEmpty()) {
+            System.out.println("youle");
+            return null;
+        }
+
+
+        return this.userService.insert(user);
+    }
 }

@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Question;
 import com.example.demo.service.QuestionService;
+import com.example.demo.entity.Option;
+import com.example.demo.service.OptionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

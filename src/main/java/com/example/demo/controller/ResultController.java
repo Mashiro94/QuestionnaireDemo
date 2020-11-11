@@ -2,11 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Result;
 import com.example.demo.service.ResultService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Result)表控制层
@@ -34,4 +33,11 @@ public class ResultController {
         return this.resultService.queryById(id);
     }
 
+    @PostMapping("insertOne")
+    public void insertOne(@RequestBody List<Result> results) {
+        //这里的result还缺少用户ID，需要下个版本增加功能
+        for(Result result : results) {
+            this.resultService.insert(result);
+        }
+    }
 }

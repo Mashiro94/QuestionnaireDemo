@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -11,12 +13,16 @@ import java.io.Serializable;
 public class Result implements Serializable {
     private static final long serialVersionUID = -73204348316993163L;
 
+    @JsonProperty(value = "resultId")
     private Integer resultId;
 
+    @JsonProperty(value = "resultQuestionId")
     private Integer resultQuestionId;
 
+    @JsonProperty(value = "resultUserId")
     private Integer resultUserId;
 
+    @JsonProperty(value = "resultContent")
     private String resultContent;
 
 

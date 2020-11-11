@@ -7,6 +7,7 @@
         <result property="questionType" column="question_type" jdbcType="VARCHAR"/>
         <result property="questionQuestionnaireId" column="question_questionnaire_id" jdbcType="INTEGER"/>
     </resultMap>
+
     <!--查询单个-->
     <select id="queryById" resultMap="QuestionMap">
         select

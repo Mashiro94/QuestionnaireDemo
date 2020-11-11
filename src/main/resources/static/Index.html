@@ -46,12 +46,16 @@
                             <template slot-scope="scope">
                                 <el-button
                                         size="mini"
-                                        @click="handleQuestionnaireEdit(scope.$index, scope.row)">编辑
+                                        @click="handleQuestionnairePublish(scope.$index)">发布
+                                </el-button>
+                                <el-button
+                                        size="mini"
+                                        @click="handleQuestionnaireEdit(scope.$index)">编辑
                                 </el-button>
                                 <el-button
                                         size="mini"
                                         type="danger"
-                                        @click="handleQuestionnaireDelete(scope.$index, scope.row)">删除
+                                        @click="handleQuestionnaireDelete(scope.$index)">删除
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -100,12 +104,12 @@
                             <template slot-scope="scope">
                                 <el-button
                                         size="mini"
-                                        @click="handleQuestionEdit(scope.$index, scope.row)">编辑选项
+                                        @click="handleQuestionEdit(scope.$index)">编辑选项
                                 </el-button>
                                 <el-button
                                         size="mini"
                                         type="danger"
-                                        @click="handleQuestionDelete(scope.$index, scope.row)">删除
+                                        @click="handleQuestionDelete(scope.$index)">删除
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -155,7 +159,7 @@
                                 <el-button
                                         size="mini"
                                         type="danger"
-                                        @click="handleOptionDelete(scope.$index, scope.row)">删除
+                                        @click="handleOptionDelete(scope.$index)">删除
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -236,6 +240,12 @@
                 this.activeIndex = key;
             },
 
+            //问卷发布到小程序
+            handleQuestionnairePublish(index) {
+                this.questionnaireId = this.QuestionnaireTableData[index].questionnaireId;
+
+            },
+
             //问卷增
             handleQuestionnaireAdd() {
                 this.dialogFormVisible = true;
@@ -256,7 +266,7 @@
             },
 
             //问卷删
-            handleQuestionnaireDelete(index, row) {
+            handleQuestionnaireDelete(index) {
                 this.questionnaireId = this.QuestionnaireTableData[index].questionnaireId;
                 axios.delete("http://localhost:8081/questionnaire/deleteById/" + this.questionnaireId, {}).then((res) => {
                     this.questionnaireId = 0;
@@ -268,7 +278,7 @@
             },
 
             //问卷列表跳转问题列表
-            handleQuestionnaireEdit(index, row) {
+            handleQuestionnaireEdit(index) {
                 this.tableVisible = '2';
                 this.questionnaireId = this.QuestionnaireTableData[index].questionnaireId;
                 axios.get('http://localhost:8081/question/selectByQuestionnaireId/' + this.questionnaireId).then(response => (this.QuestionTableData = response.data));
@@ -293,7 +303,7 @@
             },
 
             //问题删
-            handleQuestionDelete(index, row) {
+            handleQuestionDelete(index) {
                 this.questionId = this.QuestionTableData[index].questionId;
                 axios.delete("http://localhost:8081/question/deleteById/" + this.questionId, {}).then((res) => {
                     this.questionId = 0;
@@ -304,7 +314,7 @@
             },
 
             //问题列表跳转选项列表
-            handleQuestionEdit(index, row) {
+            handleQuestionEdit(index) {
                 this.tableVisible = '3';
                 this.questionId = this.QuestionTableData[index].questionId;
                 axios.get('http://localhost:8081/option/selectByQuestionId/' + this.questionId).then(response => (this.OptionTableData = response.data));
@@ -329,7 +339,7 @@
             },
 
             //选项删
-            handleOptionDelete(index, row) {
+            handleOptionDelete(index) {
                 this.optionId = this.OptionTableData[index].optionId;
                 axios.delete("http://localhost:8081/option/deleteById/" + this.optionId, {}).then((res) => {
                     this.optionId = 0;

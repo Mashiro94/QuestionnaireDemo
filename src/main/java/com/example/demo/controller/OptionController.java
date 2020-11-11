@@ -30,7 +30,7 @@ public class OptionController {
      * @return 多条数据
      */
     @GetMapping("selectByQuestionId/{questionId}")
-    public List<Question> selectByQuestionId(@PathVariable Integer questionId) {
+    public List<Option> selectByQuestionId(@PathVariable Integer questionId) {
         return this.optionService.queryAllByQuestionId(questionId);
     }
 

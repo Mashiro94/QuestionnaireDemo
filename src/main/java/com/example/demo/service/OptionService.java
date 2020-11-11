@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Option;
-import com.example.demo.entity.Question;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public interface OptionService {
      * @param questionId 外键
      * @return 对象列表
      */
-    List<Question> queryAllByQuestionId(Integer questionId);
+    List<Option> queryAllByQuestionId(Integer questionId);
 
     /**
      * 通过实体作为筛选条件查询

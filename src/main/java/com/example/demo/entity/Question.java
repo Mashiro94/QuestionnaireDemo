@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * (Question)实体类
@@ -25,6 +26,7 @@ public class Question implements Serializable {
     @JsonProperty(value = "questionQuestionnaireId")
     private Integer questionQuestionnaireId;
 
+    private List<Option> options;
 
     public Integer getQuestionId() {
         return questionId;
@@ -58,4 +60,11 @@ public class Question implements Serializable {
         this.questionQuestionnaireId = questionQuestionnaireId;
     }
 
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
+    }
 }

@@ -28,7 +28,7 @@ public interface OptionDao {
      * @param questionId 外键
      * @return 对象列表
      */
-    List<Question> queryAllByQuestionId(Integer questionId);
+    List<Option> queryAllByQuestionId(Integer questionId);
 
 
     /**

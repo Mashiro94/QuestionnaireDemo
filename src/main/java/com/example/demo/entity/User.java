@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -17,10 +19,16 @@ public class User implements Serializable {
 
     private String userCompany;
 
+    @JsonProperty(value = "openid")
     private String userOpenid;
 
+    @JsonProperty(value = "session_key")
     private String userSessionkey;
 
+    public User(String userSessionkey, String userOpenid) {
+        this.userSessionkey = userSessionkey;
+        this.userOpenid = userOpenid;
+    }
 
     public Integer getUserId() {
         return userId;

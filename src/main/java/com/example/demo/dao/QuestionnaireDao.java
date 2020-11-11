@@ -80,5 +80,4 @@ public interface QuestionnaireDao {
      * @return 影响行数
      */
     int deleteById(Integer questionnaireId);
-
 }

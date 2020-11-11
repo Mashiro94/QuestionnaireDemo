@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dao.OptionDao;
 import com.example.demo.dao.QuestionDao;
 import com.example.demo.entity.Question;
 import com.example.demo.service.QuestionService;
@@ -18,6 +19,8 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService {
     @Resource
     private QuestionDao questionDao;
+    @Resource
+    private OptionDao optionDao;
 
     /**
      * 通过ID查询单条数据
@@ -27,7 +30,9 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Override
     public Question queryById(Integer questionId) {
-        return this.questionDao.queryById(questionId);
+        Question question = this.questionDao.queryById(questionId);
+        question.setOptions(this.optionDao.queryAllByQuestionId(questionId));
+        return question;
     }
 
     /**
