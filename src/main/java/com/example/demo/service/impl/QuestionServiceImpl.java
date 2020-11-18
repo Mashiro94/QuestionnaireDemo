@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.dao.OptionDao;
 import com.example.demo.dao.QuestionDao;
 import com.example.demo.entity.Question;
+import com.example.demo.entity.Option;
 import com.example.demo.service.QuestionService;
 import org.springframework.stereotype.Service;
 

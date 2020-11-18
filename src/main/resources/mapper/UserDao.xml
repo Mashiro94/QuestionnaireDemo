@@ -15,6 +15,16 @@
         from questionnaire.user
         where user_id = #{userId}
     </select>
+    <!--查询多个-->
+    <select id="queryAllByIds" resultMap="UserMap">
+        select
+            user_id, user_name, user_company, user_openid, user_sessionkey
+        from questionnaire.user
+        where user_id in
+        <foreach collection="list" item="userId" index="index" open="(" close=")" separator=",">
+            #{userId}
+        </foreach>
+    </select>
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="UserMap">
         select

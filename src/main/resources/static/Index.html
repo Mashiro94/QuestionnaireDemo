@@ -21,6 +21,7 @@
                 <div class="line"></div>
             </el-header>
             <el-main>
+
                 <!-- 首页 -->
                 <template v-if="activeIndex === '1'">
                     <el-carousel :interval="4000" type="card" height="200px">
@@ -29,9 +30,27 @@
                         </el-carousel-item>
                     </el-carousel>
                 </template>
+
+                <template v-if="activeIndex === '2'">
+                    <el-steps :active=tableVisible>
+                        <el-step title="问卷编辑" description="增加、删除问卷，或是点击编辑以修改问卷内容"></el-step>
+                        <el-step title="问题编辑" description="增加、删除问题，或是点击编辑以修改问题选项"></el-step>
+                        <el-step title="选项编辑" description="增加、删除选项"></el-step>
+                    </el-steps>
+                </template>
+
+                <template v-if="activeIndex === '3'">
+                    <el-steps :active=resultVisible>
+                        <el-step title="选择问卷" description="选择一张问卷"></el-step>
+                        <el-step title="选择用户" description="从所有已完成该问卷的用户中选择"></el-step>
+                        <el-step title="查看问卷结果" description="查看该用户在该问卷下的所有回答"></el-step>
+                    </el-steps>
+                </template>
+
                 <!-- 问卷页 -->
                 <template v-if="activeIndex === '2' && tableVisible === '1'">
                     <el-table
+                            key="问卷页"
                             :data="QuestionnaireTableData"
                             style="width: 100%">
                         <el-table-column
@@ -44,10 +63,6 @@
                         </el-table-column>
                         <el-table-column align="right">
                             <template slot-scope="scope">
-                                <el-button
-                                        size="mini"
-                                        @click="handleQuestionnairePublish(scope.$index)">发布
-                                </el-button>
                                 <el-button
                                         size="mini"
                                         @click="handleQuestionnaireEdit(scope.$index)">编辑
@@ -80,9 +95,10 @@
                         </div>
                     </el-dialog>
                 </template>
+
                 <!-- 问题页 -->
                 <template v-if="activeIndex === '2' && tableVisible === '2'">
-                    <el-table
+                    <el-table key="问题页"
                             :data="QuestionTableData"
                             stripe
                             style="width: 100%">
@@ -134,9 +150,11 @@
                         </div>
                     </el-dialog>
                 </template>
+
                 <!-- 选项页 -->
                 <template v-if="activeIndex === '2' && tableVisible === '3'">
                     <el-table
+                            key="选项页"
                             :data="OptionTableData"
                             stripe
                             style="width: 100%">
@@ -185,6 +203,57 @@
                     </el-dialog>
                 </template>
 
+                <!-- 结果问卷展示 -->
+                <template v-if="activeIndex === '3' && resultVisible === '1'">
+
+                    <el-table
+                            key="结果问卷展示"
+                            :data="QuestionnaireTableData"
+                            style="width: 100%"
+                            @row-click="openUserTable">
+                        <el-table-column
+                                label="问卷名"
+                                prop="questionnaireName">
+                        </el-table-column>
+                        <el-table-column
+                                label="问卷简介"
+                                prop="questionnaireDescription">
+                        </el-table-column>
+                    </el-table>
+                </template>
+
+                <!--结果用户展示-->
+                <template v-if="activeIndex === '3'&& resultVisible === '2'">
+                    <el-table key="结果用户展示" :data="ResultUserTableData" style="width: 100%" @row-click="openResultTable">
+                        <el-table-column prop="userName" label="客户姓名"></el-table-column>
+                        <el-table-column prop="userCompany" label="客户企业"></el-table-column>
+                        <el-table-column align="right">
+                            <template slot="header" slot-scope="scope">
+                                <el-button
+                                        size="mini"
+                                        @click="resultVisible = '1'">返回
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
+
+                <!--结果展示-->
+                <template v-if="activeIndex === '3'&& resultVisible === '3'">
+                    <el-table key="结果展示" :data="ResultTableData" style="width: 100%">
+                        <el-table-column prop="resultQuestionContent" label="问题"></el-table-column>
+                        <el-table-column prop="resultOptionContent" label="客户选项"></el-table-column>
+
+                        <el-table-column align="right">
+                            <template slot="header" slot-scope="scope">
+                                <el-button
+                                        size="mini"
+                                        @click="resultVisible = '2'">返回
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </template>
             </el-main>
             <el-footer>Footer</el-footer>
         </el-container>
@@ -193,7 +262,7 @@
 </body>
 <!-- import Vue before Element -->
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
-<!-- import JavaScript -->
+<!-- import Element -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <!-- import axios -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -207,11 +276,15 @@
             QuestionnaireTableData: null,
             QuestionTableData: null,
             OptionTableData: null,
+            ResultQuestionnaireTableData: null,
+            ResultUserTableData: null,
+            ResultTableData: null,
 
             dialogFormVisible: false,           //显示问卷添加表单
             dialogForm2Visible: false,          //显示问题添加表单
             dialogForm3Visible: false,          //显示选项添加表单
-            tableVisible: '1',                  //显示问卷：1，问题： 2， 选项： 3
+            tableVisible: '1',                  //显示问卷：1，问题： 2，选项：3
+            resultVisible: '1',                 //显示问卷：1，用户： 2，选项：3
 
             questionnaireForm: {
                 name: '',
@@ -228,7 +301,9 @@
 
             questionnaireId: '',
             questionId: '',
-            optionId: ''
+            optionId: '',
+            resultQuestionnaireId: '',
+            resultUserId: ''
         },
         mounted() {
             axios.get('http://localhost:8081/questionnaire/selectAll').then(response => (this.QuestionnaireTableData = response.data));
@@ -238,6 +313,9 @@
             //功能页面切换
             handleSelect(key, keyPath) {
                 this.activeIndex = key;
+                console.log(this.activeIndex);
+                console.log(this.tableVisible);
+                console.log(this.resultVisible);
             },
 
             //问卷发布到小程序
@@ -257,12 +335,13 @@
                     questionnaireName: this.questionnaireForm.name,
                     questionnaireDescription: this.questionnaireForm.description
                 })
-                .then((res) => {
-                    axios.get('http://localhost:8081/questionnaire/selectAll').then(response => (this.QuestionnaireTableData = response.data));
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
+                    .then((res) => {
+                        axios.get('http://localhost:8081/questionnaire/selectAll')
+                            .then(response => (this.QuestionnaireTableData = response.data));
+                    })
+                    .catch((err) => {
+                        console.log(err.message);
+                    });
             },
 
             //问卷删
@@ -271,7 +350,8 @@
                 axios.delete("http://localhost:8081/questionnaire/deleteById/" + this.questionnaireId, {}).then((res) => {
                     this.questionnaireId = 0;
                     //刷新问卷表
-                    axios.get('http://localhost:8081/questionnaire/selectAll').then(response => (this.QuestionnaireTableData = response.data));
+                    axios.get('http://localhost:8081/questionnaire/selectAll')
+                        .then(response => (this.QuestionnaireTableData = response.data));
                 }).catch((err) => {
                     console.log(err);
                 })
@@ -281,7 +361,8 @@
             handleQuestionnaireEdit(index) {
                 this.tableVisible = '2';
                 this.questionnaireId = this.QuestionnaireTableData[index].questionnaireId;
-                axios.get('http://localhost:8081/question/selectByQuestionnaireId/' + this.questionnaireId).then(response => (this.QuestionTableData = response.data));
+                axios.get('http://localhost:8081/question/selectByQuestionnaireId/' + this.questionnaireId)
+                    .then(response => (this.QuestionTableData = response.data));
             },
 
             //问题增
@@ -296,7 +377,8 @@
                     questionType: this.questionForm.type,
                     questionQuestionnaireId: this.questionnaireId
                 }).then((res) => {
-                    axios.get('http://localhost:8081/question/selectByQuestionnaireId/' + this.questionnaireId).then(response => (this.QuestionTableData = response.data));
+                    axios.get('http://localhost:8081/question/selectByQuestionnaireId/' + this.questionnaireId)
+                        .then(response => (this.QuestionTableData = response.data));
                 }).catch((err) => {
                     console.log(err.message);
                 });
@@ -307,7 +389,8 @@
                 this.questionId = this.QuestionTableData[index].questionId;
                 axios.delete("http://localhost:8081/question/deleteById/" + this.questionId, {}).then((res) => {
                     this.questionId = 0;
-                    axios.get('http://localhost:8081/question/selectByQuestionnaireId/' + this.questionnaireId).then(response => (this.QuestionTableData = response.data));
+                    axios.get('http://localhost:8081/question/selectByQuestionnaireId/' + this.questionnaireId)
+                        .then(response => (this.QuestionTableData = response.data));
                 }).catch((err) => {
                     console.log(err);
                 })
@@ -317,7 +400,8 @@
             handleQuestionEdit(index) {
                 this.tableVisible = '3';
                 this.questionId = this.QuestionTableData[index].questionId;
-                axios.get('http://localhost:8081/option/selectByQuestionId/' + this.questionId).then(response => (this.OptionTableData = response.data));
+                axios.get('http://localhost:8081/option/selectByQuestionId/' + this.questionId)
+                    .then(response => (this.OptionTableData = response.data));
             },
 
             //选项增
@@ -332,7 +416,8 @@
                     optionValue: this.optionForm.value,
                     optionQuestionId: this.questionId
                 }).then((res) => {
-                    axios.get('http://localhost:8081/option/selectByQuestionId/' + this.questionId).then(response => (this.OptionTableData = response.data));
+                    axios.get('http://localhost:8081/option/selectByQuestionId/' + this.questionId)
+                        .then(response => (this.OptionTableData = response.data));
                 }).catch((err) => {
                     console.log(err.message);
                 });
@@ -342,11 +427,34 @@
             handleOptionDelete(index) {
                 this.optionId = this.OptionTableData[index].optionId;
                 axios.delete("http://localhost:8081/option/deleteById/" + this.optionId, {}).then((res) => {
-                    this.optionId = 0;
-                    axios.get('http://localhost:8081/option/selectByQuestionId/' + this.questionId).then(response => (this.OptionTableData = response.data));
-                }).catch((err) => {
-                    console.log(err);
-                })
+                        this.optionId = 0;
+                        axios.get('http://localhost:8081/option/selectByQuestionId/' + this.questionId)
+                            .then(response => (this.OptionTableData = response.data));
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+            },
+
+            //查看做过某问卷的所有用户
+            openUserTable(index) {
+                this.resultVisible = '2';
+                this.resultQuestionnaireId = index.questionnaireId;
+                axios.get('http://localhost:8081/user/selectByQuestionnaireId/' + this.resultQuestionnaireId)
+                    .then(response => (this.ResultUserTableData = response.data));
+            },
+
+            //查看该用户在此问卷下的所有选项
+            openResultTable(index) {
+                this.resultVisible = '3';
+                console.log('this.resultVisible ', this.resultVisible)
+                this.resultUserId = index.userId;
+                axios.get('http://localhost:8081/result/selectByQuestionnaireUserId', {
+                        params: {
+                            questionnaireId: this.resultQuestionnaireId,
+                            userId: this.resultUserId
+                        }
+                    })
+                    .then(response => (this.ResultTableData = response.data));
             }
         }
     })

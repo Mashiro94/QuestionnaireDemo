@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * (Result)实体类
@@ -25,6 +26,38 @@ public class Result implements Serializable {
     @JsonProperty(value = "resultContent")
     private String resultContent;
 
+    private String resultQuestionContent;
+
+    private List<String> resultOptionContent;
+
+    public Result() {
+
+    }
+
+    public Result(Integer resultQuestionId) {
+        this.resultQuestionId = resultQuestionId;
+    }
+
+    public Result(Integer resultQuestionId, Integer resultUserId) {
+        this.resultQuestionId = resultQuestionId;
+        this.resultUserId = resultUserId;
+    }
+
+    public String getResultQuestionContent() {
+        return resultQuestionContent;
+    }
+
+    public void setResultQuestionContent(String resultQuestionContent) {
+        this.resultQuestionContent = resultQuestionContent;
+    }
+
+    public List<String> getResultOptionContent() {
+        return resultOptionContent;
+    }
+
+    public void setResultOptionContent(List<String> resultOptionContent) {
+        this.resultOptionContent = resultOptionContent;
+    }
 
     public Integer getResultId() {
         return resultId;

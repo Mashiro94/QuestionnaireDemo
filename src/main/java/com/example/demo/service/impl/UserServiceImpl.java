@@ -31,6 +31,16 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 通过ID查询多条数据
+     *
+     * @param userIds 主键
+     * @return 实例对象列表
+     */
+    public List<User> queryAllByIds(List<Integer> userIds) {
+        return this.userDao.queryAllByIds(userIds);
+    }
+
+    /**
      * 查询多条数据
      *
      * @param offset 查询起始位置

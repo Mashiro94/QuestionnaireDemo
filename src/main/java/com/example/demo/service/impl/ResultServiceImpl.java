@@ -43,6 +43,17 @@ public class ResultServiceImpl implements ResultService {
     }
 
     /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param result 实例对象
+     * @return 对象列表
+     */
+    @Override
+    public List<Result> queryAll(Result result) {
+        return this.resultDao.queryAll(result);
+    }
+
+    /**
      * 新增数据
      *
      * @param result 实例对象

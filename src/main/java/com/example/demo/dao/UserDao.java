@@ -22,6 +22,14 @@ public interface UserDao {
     User queryById(Integer userId);
 
     /**
+     * 通过ID查询多条数据
+     *
+     * @param userIds 主键
+     * @return 实例对象列表
+     */
+    List<User> queryAllByIds(List<Integer> userIds);
+
+    /**
      * 查询指定行数据
      *
      * @param offset 查询起始位置
@@ -78,5 +86,4 @@ public interface UserDao {
      * @return 影响行数
      */
     int deleteById(Integer userId);
-
 }

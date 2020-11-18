@@ -25,6 +25,11 @@ public class Option implements Serializable {
     @JsonProperty(value = "optionValue")
     private Integer optionValue;
 
+    public Option(Integer optionQuestionId, Integer optionValue) {
+        this.optionQuestionId = optionQuestionId;
+        this.optionValue = optionValue;
+    }
+
     public Integer getOptionId() {
         return optionId;
     }

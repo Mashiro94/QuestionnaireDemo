@@ -21,6 +21,14 @@ public interface UserService {
     User queryById(Integer userId);
 
     /**
+     * 通过ID查询多条数据
+     *
+     * @param userIds 主键
+     * @return 实例对象列表
+     */
+    List<User> queryAllByIds(List<Integer> userIds);
+
+    /**
      * 查询多条数据
      *
      * @param offset 查询起始位置

@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * (User)实体类
@@ -24,6 +25,10 @@ public class User implements Serializable {
 
     @JsonProperty(value = "session_key")
     private String userSessionkey;
+
+    public User() {
+
+    }
 
     public User(String userSessionkey, String userOpenid) {
         this.userSessionkey = userSessionkey;
